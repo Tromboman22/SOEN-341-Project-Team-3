@@ -1,0 +1,15 @@
+Task : Project development environment setup
+
+Purpose of AI Use: Research and information gathering; System design and architecture setup.
+
+Chat Link or Prompt/Response: https://chat.deepseek.com/share/twtfckw8wlitmoowjf 
+ 
+AI-Suggested Content: Generates a step by step guide to set up the preferred environment for the developers to follow and use.
+
+Validation: Following the guide the environment was built successfully, the client was able to connect with the server. 
+
+Decision: Modified before use. 
+
+Reflection: The guide significantly reduced research time and provided a coherent starting point. However, AI-generated shell commands were not fully cross-platform — several Windows PowerShell-specific issues had to be fixed manually
+
+Responsible Person: Shengyuan Wang

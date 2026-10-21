@@ -1,0 +1,15 @@
+Task : Project code implementation
+
+Purpose of AI Use: Generating code for the project functionality
+
+Chat Link or Prompt/Response: https://chat.deepseek.com/share/hjk1o7mit67gs50h5f 
+ 
+AI-Suggested Content: Generate the frontend and the back end code for the registration page, sign in page and the upload document page. 
+
+Validation: The code was correctly generated, all the pages created were functioning as what we expected. 
+
+Decision: Modified before use.
+
+Reflection: The Ai generated content is very efficient, but however, due to the difference of the local path of the files and the structure that was built earlier, certain modification was needed. 
+
+Responsible Person: Shengyuan Wang

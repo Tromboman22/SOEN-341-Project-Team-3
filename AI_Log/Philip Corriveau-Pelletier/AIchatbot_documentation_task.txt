@@ -1,0 +1,24 @@
+Task ID/Title: 
+	Learn to share and document AI usage.
+
+Purpose of AI Use: 
+	Simplify documentation requirements.
+
+Chat Link or Prompt/Response: 
+
+	https://chatgpt.com/share/6aba752f-d23c-83ea-a714-24843d32f0ed
+
+AI-Suggested Content: 
+	AI proposed the steps to get a working, sharable link to the conversation for documentation purposes.
+
+Validation: 
+	Fallowing the steps we were able to get a sharable link to the AI chatbot conversations and tested it using multiple browsers and computers.
+
+Decision: Indicate whether the AI output was:
+	Accepted
+
+Reflection: 
+	We learned the proper sharing method for AI chatbot conversations.
+
+Responsible Person: 
+	Philip

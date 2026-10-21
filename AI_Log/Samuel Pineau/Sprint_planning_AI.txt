@@ -1,0 +1,23 @@
+Task ID/Title: 
+	Structure a sprint planning document
+
+Purpose of AI Use: 
+	Simplify documentation requirements.
+
+Chat Link or Prompt/Response: 
+	https://claude.ai/share/661c5a2a-61cf-4fa6-b904-e34e1cd6bce1
+
+AI-Suggested Content: 
+	AI provided a skeleton for what a sprint planning document should look like.
+
+Validation: 
+	Similar structure and ideas as those shown in class.
+
+Decision: Indicate whether the AI output was:
+	Modified and partially accepted.
+
+Reflection: 
+	The output was generic but useful as bullet points to help write the actual document.
+
+Responsible Person: 
+	Samuel Pineau

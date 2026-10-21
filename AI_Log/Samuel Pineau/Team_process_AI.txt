@@ -1,0 +1,23 @@
+Task ID/Title: 
+	Team Process Definitions documentation
+
+Purpose of AI Use: 
+	Simplify documentation requirements.
+
+Chat Link or Prompt/Response: 
+	https://share.gemini.google/vUA416V4J8pf
+
+AI-Suggested Content: 
+	Provided bullet points and general guideline of various processes that form the Team Process Definition.
+
+Validation: 
+	Similar to what was shown in class and tutorial.
+
+Decision: Indicate whether the AI output was:
+	Modified and partially accepted.
+
+Reflection: 
+	AI simplified the requirements to a few bullets points that make the task simpler to perform for the first times.
+
+Responsible Person: 
+	Samuel Pineau
