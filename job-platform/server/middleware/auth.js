@@ -17,3 +17,15 @@ export const protect = async (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+
+// Usage: router.get("/x", protect, requireRole("recruiter"), handler)
+// Users created before roles existed have no role and are treated as applicants.
+export const requireRole =
+  (...roles) =>
+  (req, res, next) => {
+    const role = req.user?.role || "applicant";
+    if (!roles.includes(role)) {
+      return res.status(403).json({ message: "Forbidden for your role" });
+    }
+    next();
+  };

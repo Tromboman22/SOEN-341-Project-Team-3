@@ -4,7 +4,13 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "applicant",
+    companyName: "",
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -36,6 +42,20 @@ export default function Register() {
             {error}
           </div>
         )}
+        <div className="flex mb-4 rounded overflow-hidden border border-gray-300 text-sm">
+          {["applicant", "recruiter"].map((r) => (
+            <button
+              type="button"
+              key={r}
+              onClick={() => setForm({ ...form, role: r })}
+              className={`flex-1 py-2 capitalize ${
+                form.role === r ? "bg-blue-600 text-white" : "bg-white text-gray-600"
+              }`}
+            >
+              {r === "applicant" ? "I'm looking for a job" : "I'm hiring"}
+            </button>
+          ))}
+        </div>
         <input
           name="name"
           placeholder="Full name"
@@ -44,6 +64,16 @@ export default function Register() {
           required
           className="w-full border p-2 rounded mb-3"
         />
+        {form.role === "recruiter" && (
+          <input
+            name="companyName"
+            placeholder="Company name"
+            value={form.companyName}
+            onChange={onChange}
+            required
+            className="w-full border p-2 rounded mb-3"
+          />
+        )}
         <input
           name="email"
           type="email"
