@@ -16,7 +16,6 @@ Backend : Express.js
 Frontend : React.js
 
 
-# Connecting to the Database:
 # Setup Guide: Run CareerConnect Locally and Connect to the Database
 
 ## Prerequisites
