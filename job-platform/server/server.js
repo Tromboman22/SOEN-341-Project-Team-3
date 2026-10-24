@@ -1,9 +1,12 @@
-﻿import express from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
+import jobRoutes from "./routes/jobRoutes.js";
+import recruiterRoutes from "./routes/recruiterRoutes.js";
+
 
 dotenv.config();
 
@@ -14,6 +17,8 @@ app.use(express.json());
 app.get("/", (req, res) => res.json({ status: "OK" }));
 app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
+app.use("/api/jobs", jobRoutes);
+app.use("/api/recruiter", recruiterRoutes);
 
 // error handler (multer errors included)
 app.use((err, req, res, next) => {
