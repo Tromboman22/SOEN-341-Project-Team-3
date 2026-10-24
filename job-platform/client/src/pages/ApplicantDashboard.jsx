@@ -19,7 +19,11 @@ export default function ApplicantDashboard() {
   const [applyingTo, setApplyingTo] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
   const [jobMsg, setJobMsg] = useState("");
-
+// Application Tracking
+  const [applications, setApplications] = useState([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(true);
+  const [applicationsError, setApplicationsError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const loadJobs = async (q = "") => {
     setJobsLoading(true);
     try {
@@ -31,10 +35,26 @@ export default function ApplicantDashboard() {
       setJobsLoading(false);
     }
   };
+  const loadApplications = async () => {
+  setApplicationsLoading(true);
+  setApplicationsError("");
 
-  useEffect(() => {
-    loadJobs();
-  }, []);
+  try {
+    const res = await api.get("/applications/my");
+    setApplications(res.data.applications);
+  } catch (err) {
+    setApplicationsError(
+      err.response?.data?.message || "Could not load applications"
+    );
+  } finally {
+    setApplicationsLoading(false);
+  }
+};
+
+ useEffect(() => {
+  loadJobs();
+  loadApplications();
+}, []);
 
   const onUpload = async (e) => {
     e.preventDefault();
@@ -70,6 +90,7 @@ export default function ApplicantDashboard() {
     setJobMsg("");
     try {
       await api.post(`/jobs/${jobId}/apply`, { coverLetter });
+      await loadApplications();
       setJobMsg("Application sent ✅");
       setApplyingTo(null);
       setCoverLetter("");
@@ -199,6 +220,61 @@ export default function ApplicantDashboard() {
             </ul>
           )}
         </section>
+        {/* Application Tracking */}
+<section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-xl font-bold">My Applications</h2>
+
+    <button
+      onClick={loadApplications}
+      className="text-sm text-blue-600 hover:underline"
+    >
+      Refresh
+    </button>
+  </div>
+
+  {applicationsError && (
+    <p className="text-red-600 text-sm mb-3">
+      {applicationsError}
+    </p>
+  )}
+
+  {applicationsLoading ? (
+    <p className="text-gray-500">Loading applications...</p>
+  ) : applications.length === 0 ? (
+    <p className="text-gray-500">
+      You have not submitted any applications yet.
+    </p>
+  ) : (
+    <div className="space-y-4">
+      {applications.map((application) => (
+        <div
+          key={application._id}
+          className="border rounded-lg p-4"
+        >
+          <h3 className="font-semibold text-lg">
+            {application.job?.title || "Job unavailable"}
+          </h3>
+
+          <p className="text-sm text-gray-500">
+            {application.job?.company || "Unknown company"}
+          </p>
+
+          <p className="text-sm mt-2">
+            Applied on:{" "}
+            {new Date(application.createdAt).toLocaleDateString()}
+          </p>
+
+          <div className="mt-3">
+            <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+              {application.status}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
       </div>
     </div>
   );
