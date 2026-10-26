@@ -1,0 +1,15 @@
+Task: Project code implementation — Profile management and delete-resume functionality
+
+Purpose of AI Use: Generating code for the project functionality
+
+Chat Link or Prompt/Response: https://chat.deepseek.com/share/a2r8d6os14yu50bgsm
+
+AI-Suggested Content: Generated backend controllers and routes for profile management and resume deletion, plus the React profile page and delete button on the applicant dashboard.
+
+Validation: Tested in the browser — profile saves persisted after refresh, resume deletion removed the file and cleared the database, all features worked as expected.
+
+Decision: Modified before use.
+
+Reflection: The generated code worked but needed adaptation to match the project's existing axios interceptor and structure, so the frontend was simplified.
+
+Responsible Person: Shengyuan Wang
