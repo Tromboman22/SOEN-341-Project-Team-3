@@ -56,11 +56,17 @@ export default function ApplicationsPanel({ job, onClose, onChanged }) {
                   <p className="font-semibold">{a.applicant?.name ?? "Deleted user"}</p>
                   <p className="text-xs text-gray-500">{a.applicant?.email}</p>
                   {a.applicant?.headline && <p className="text-xs text-gray-600 mt-1">{a.applicant.headline}</p>}
+                  {(a.applicant?.location || a.applicant?.phone) && (
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {[a.applicant.location, a.applicant.phone].filter(Boolean).join(" · ")}
+                    </p>
+                  )}
                 </div>
                 <p className="text-xs text-gray-400 whitespace-nowrap">
                   {new Date(a.createdAt).toLocaleDateString()}
                 </p>
               </div>
+              <ApplicantProfile applicant={a.applicant} />
               {a.coverLetter && (
                 <p className="text-sm text-gray-700 mt-2 whitespace-pre-wrap border-l-2 border-gray-200 pl-2">
                   {a.coverLetter}
@@ -86,6 +92,45 @@ export default function ApplicationsPanel({ job, onClose, onChanged }) {
           ))}
         </ul>
       </div>
+    </div>
+  );
+}
+
+const LINK_LABELS = { linkedin: "LinkedIn", github: "GitHub", portfolio: "Portfolio" };
+const isWebLink = (url) => /^https?:\/\//i.test(url || "");
+
+// Skills, links and bio from the applicant's profile (all optional)
+function ApplicantProfile({ applicant }) {
+  if (!applicant) return null;
+  const skills = applicant.skills ?? [];
+  const links = Object.entries(applicant.links ?? {}).filter(([, url]) => isWebLink(url));
+  if (!skills.length && !links.length && !applicant.bio) return null;
+
+  return (
+    <div className="mt-2 space-y-2">
+      {skills.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {skills.map((s) => (
+            <span key={s} className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs">
+              {s}
+            </span>
+          ))}
+        </div>
+      )}
+      {links.length > 0 && (
+        <div className="flex flex-wrap gap-3 text-xs">
+          {links.map(([key, url]) => (
+            <a key={key} href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              {LINK_LABELS[key] ?? key}
+            </a>
+          ))}
+        </div>
+      )}
+      {applicant.bio && (
+        <p className="text-xs text-gray-600 whitespace-pre-wrap line-clamp-3" title={applicant.bio}>
+          {applicant.bio}
+        </p>
+      )}
     </div>
   );
 }

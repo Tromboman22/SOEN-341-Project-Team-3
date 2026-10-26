@@ -94,6 +94,9 @@ export default function RecruiterDashboard() {
             >
               + New job
             </button>
+            <button onClick={() => navigate("/profile")} className="text-sm text-blue-600 hover:underline">
+              Profile
+            </button>
             <button onClick={onLogout} className="text-sm text-red-600 hover:underline">
               Logout
             </button>
