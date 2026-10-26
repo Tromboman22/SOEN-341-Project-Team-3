@@ -1,0 +1,39 @@
+Task ID/Title:
+	#42 Implement profile management functionality for job seekers (Story 1-2)
+
+Purpose of AI Use:
+	Compare the project board with the code, then finish and test profile management.
+
+Chat Link or Prompt/Response:
+	Claude (claude.ai).
+	Prompt 1: Review the project board and the job-platform code; what is done and what is left?
+	Prompt 2: "Let's do this #42 Profile management"
+	Response: Claude found existing profile work on an unmerged branch, built on it, tested it, and returned a git patch.
+
+AI-Suggested Content:
+	Claude found that the branch feature/profile-and-resume-management (Shengyuan) already had profile
+	management and resume deletion but was never merged into main. Instead of rewriting it, it added on top:
+	- server-side validation for profile fields (required name, length limits, skill cleanup, http(s)-only links)
+	- editing of the user's name
+	- keeping job postings' company name in sync when a recruiter renames their company
+	- showing the applicant's profile (skills, links, bio, location, phone) to recruiters in the applicants panel
+	- removal of an unused duplicate deleteResume in applicationController.js
+	- 23 unit tests (tests/profile.test.js, tests/resumeDelete.test.js) in the same node: test style as Maxime's tests
+
+Validation:
+	Claude ran the new tests (23 passing), merged the branch with main and testing-maxime in a scratch copy
+	(64 tests passing, no conflicts), built the client, and checked the profile page and both dashboards in a
+	headless browser at desktop and phone sizes. I applied the patch to the branch, read through the diff,
+	and re-ran npm test locally.
+
+Decision:
+	Accepted after review.
+
+Reflection:
+	The most useful step was checking the repo before building: the feature already existed on an unmerged
+	branch, so building on it avoided duplicate work and merge conflicts. Next time I will check open branches
+	and pull requests before starting a board task. It also showed why validation has to happen on the server,
+	not only in the form: the earlier version saved anything sent directly to the API.
+
+Responsible Person:
+	Joshua
