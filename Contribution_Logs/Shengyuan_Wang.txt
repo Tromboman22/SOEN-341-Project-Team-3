@@ -1,1 +1,22 @@
+Shengyuan Wang 
+40281234
 
+
+## Sprint 1
+
+Contributions:
+- Set up the project environment
+- Implemented backend authentication (register, login)
+- Implemented PDF resume upload
+- Built the registration and login pages
+
+---
+
+## Sprint 2
+
+Contributions:
+- Added user profile system
+- Created a seperate page for the profile management
+- Added delete-resume functionality
+- Inproved UI for the resume management
+- Reviewed the code implemented by otheres
