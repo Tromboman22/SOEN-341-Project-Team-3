@@ -1,9 +1,19 @@
--Reviewed every file and document related to the project since the start (I arrived late in the project)
--Reviewed the implemented Sprint 1 and 2 backend and frontend functionalities 
--Participated in meeting #2 of Sprint 2
+-Reviewed every file and document related to the project since the start (I arrived late in the project) ~3h
+-Reviewed the implemented Sprint 1 and 2 backend and frontend functionalities ~15min
+
+-Participated in meeting #2 of Sprint 2 ~1h
+
 -Added the existing user stories from sprints 1 and 2 to the github issues 
 -Added acceptance tasks according to our existing acceptance criterias and user stories 
 -Added all tasks done for sprint 2 to the issues 
 -Linked the user stories to the corresponding tasks and acceptance tasks
--Created labels "Task, Acceptance, and User Story" to the issues tab on github and applied these accordingly to all of the existing issues mentionned above
--Wrote the Meeting_Minutes.Sprint2Meeting2.txt file
+-Created labels "Task, Acceptance, and User Story" to the issues tab on github and applied these accordingly to all of the existing issues mentionned above (All of the backlog features took ~3h as a whole)
+
+-Wrote the Meeting_Minutes.Sprint2Meeting2.txt file ~10min
+
+-Created all unit tests and edge case tests in the branch test_maxime ~3h
+-Created a continuous integration feature which gives feedback on any push/pull for all tests ~1h 
+
+-Created my own AI log file and filled it ~5min
+
+-Pulled the branch test_maxime including all tests and CI feature
