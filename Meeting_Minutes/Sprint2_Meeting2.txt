@@ -5,6 +5,11 @@ October 21st, 2026
 Duration: 30 minutes
 Attendance: Shenyang, Yansong, Samuel
 
+Topics Discussed:
+
+Distribution of tasks for the sprint
+Overview of sprint requirements
+
 Meeting 2/2
 October 25th, 2026
 Duration: 60 minutes
