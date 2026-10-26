@@ -103,7 +103,10 @@ export const listJobApplications = async (req, res) => {
     if (!job) return res.status(404).json({ message: "Job not found" });
     const applications = await Application.find({ job: job._id })
       .sort({ createdAt: -1 })
-      .populate("applicant", "name email headline resume.originalName resume.size resume.uploadedAt")
+      .populate(
+        "applicant",
+        "name email headline bio location phone skills links resume.originalName resume.size resume.uploadedAt"
+      )
       .lean();
     res.json({ job, applications });
   } catch (err) {

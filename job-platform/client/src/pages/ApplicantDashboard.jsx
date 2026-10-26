@@ -127,9 +127,20 @@ export default function ApplicantDashboard() {
     return (
         <div className="min-h-screen bg-gray-50 p-6">
             <div className="max-w-3xl mx-auto space-y-6">
-                <header className="flex justify-between items-center">
-                    <h1 className="text-2xl font-bold">Hi, {user?.name} 👋</h1>
-                    <div className="flex items-center gap-4">
+                <header className="flex justify-between items-center gap-4">
+                    <div className="min-w-0">
+                        <h1 className="text-2xl font-bold">Hi, {user?.name} 👋</h1>
+                        {user?.headline ? (
+                            <p className="text-sm text-gray-500 truncate">
+                                {[user.headline, user.location].filter(Boolean).join(" · ")}
+                            </p>
+                        ) : (
+                            <p className="text-sm text-gray-500">
+                                Add a headline and skills so recruiters know what you do.
+                            </p>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-4 shrink-0">
                         <button
                             onClick={() => navigate("/profile")}
                             className="text-sm text-blue-600 hover:underline"
@@ -145,7 +156,6 @@ export default function ApplicantDashboard() {
                     </div>
                 </header>
 
-                {/* Resume: optional */}
                 {/* Resume: optional */}
                 <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <h2 className="font-semibold mb-1">
