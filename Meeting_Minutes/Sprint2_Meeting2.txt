@@ -1,0 +1,13 @@
+Sprint 2 
+Meeting 2/2
+October 25th, 2026
+Duration: 60 minutes
+Attendance: All members attended except Philip
+
+Topics Discussed: 
+
+Review of the current state of the project 
+Review of the new implementations of the project
+Discussions about the remaining parts to be completed
+Unit testing, edge case testing were assigned to Maxime
+Discussed the need to organize the backlog is this fine or is action items actually a thing
