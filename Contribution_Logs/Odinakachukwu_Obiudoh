@@ -1,4 +1,18 @@
--Participated in meeting #2 of Sprint 2 ~1h
+Odinakachukwu Obiudoh
+40109139
+## Sprint 1 
+
+## Sprint 2
+
 -Participated in meeting #1 of Sprint 2 ~1h
--Created my own AI log file and filled it ~5min
--Pulled the branch test_maxime including all tests and CI feature
+-Participated in meeting #2 of Sprint 2 ~1h
+-Reviewed the project board against the code in the repo to find what was done and what was left. Found that the board was out of date (most implementation tasks were built but still marked Todo) and that the profile management work on feature/profile-and-resume-management was never merged into main ~20min (AI-assisted)
+-Completed profile management (#42) on top of Shengyuan's branch feature/profile-and-resume-management (AI-assisted, see AI_Log/Odinakachukwu Obiudoh) ~1h
+   -Added server-side validation for profile fields (required name, length limits, skill cleanup, http(s)-only links)
+   -Made the user's name editable on the profile page
+   -Recruiters now see the applicant's profile (skills, links, bio, location, phone) when reviewing applications
+   -Job postings now update when a recruiter renames their company
+   -Removed an unused duplicate deleteResume function
+   -Added 23 unit tests for profile management and resume delete (tests/profile.test.js, tests/resumeDelete.test.js)
+-Applied the changes to the branch, re-ran the tests and pushed ~20min
+-Created my AI log file for #42 and filled it ~10min
