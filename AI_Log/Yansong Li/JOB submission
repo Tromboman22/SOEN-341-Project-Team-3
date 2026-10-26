@@ -1,0 +1,23 @@
+**Task ID/Title:**
+    Implement Job Application Feature
+
+**Purpose of AI Use:**
+    Assist with implementing and debugging the job application functionality.
+
+**Chat Link or Prompt/Response:**
+    Used ChatGPT to review code, troubleshoot errors, and provide implementation guidance.
+
+**AI-Suggested Content:**
+    AI suggested improvements to the application controller, frontend integration, and MongoDB database connection.
+
+**Validation:**
+    Reviewed the suggested code, tested the backend connection, and checked compatibility with the existing project structure.
+
+**Decision:**
+    Modified and partially accepted.
+
+**Reflection:**
+    AI helped simplify the development process and identify configuration errors more efficiently. The suggestions provided useful guidance for implementing the feature while allowing me to understand the code and make necessary adjustments.
+
+**Responsible Person:**
+    Li Yansong
