@@ -17,3 +17,5 @@
 -Created my own AI log file and filled it ~5min
 
 -Pulled the branch test_maxime including all tests and CI feature
+
+-Organized the project board ~15mins
