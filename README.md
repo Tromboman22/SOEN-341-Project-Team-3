@@ -16,6 +16,8 @@ Backend : Express.js
 Frontend : React.js
 
 
-# Link for the website
+# Website
 
-https://dreamy-stroopwafel-ddde76.netlify.app
+Link: https://dreamy-stroopwafel-ddde76.netlify.app
+
+Login with email and password, become either a recruiter or an applicant
