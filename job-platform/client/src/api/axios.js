@@ -1,13 +1,15 @@
 ﻿import axios from "axios";
 
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const api = axios.create({
-    baseURL: "/api",   // ✅ 走 Vite 代理
+  baseURL: `${API_URL}/api`,
 });
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
 });
 
 export default api;
