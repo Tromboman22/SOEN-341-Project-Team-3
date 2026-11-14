@@ -155,6 +155,7 @@ export default function RecruiterDashboard() {
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
                       {[job.location, job.remote && "Remote", job.type].filter(Boolean).join(" · ")}
+                      {` · ${job.positions ?? 1} position${(job.positions ?? 1) === 1 ? "" : "s"}`}
                       {job.deadline && ` · closes ${new Date(job.deadline).toLocaleDateString()}`}
                     </p>
                   </div>

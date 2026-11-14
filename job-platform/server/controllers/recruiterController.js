@@ -17,6 +17,8 @@ const EDITABLE = [
   "salaryMin",
   "salaryMax",
   "deadline",
+  "positions",
+  "resumeRequired",
   "status",
 ];
 
@@ -30,6 +32,9 @@ const pickJobFields = (body) => {
       .filter(Boolean);
   for (const k of ["salaryMin", "salaryMax", "deadline"])
     if (data[k] === "" || data[k] === null) data[k] = undefined;
+  // Blank positions -> keep the default (1) / existing value
+  if (data.positions === "" || data.positions === null) delete data.positions;
+  if (data.positions !== undefined) data.positions = Number(data.positions);
   return data;
 };
 

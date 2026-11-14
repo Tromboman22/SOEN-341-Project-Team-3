@@ -14,6 +14,8 @@ const toForm = (job) => ({
   salaryMin: job?.salaryMin ?? "",
   salaryMax: job?.salaryMax ?? "",
   deadline: job?.deadline ? job.deadline.slice(0, 10) : "",
+  positions: job?.positions ?? 1,
+  resumeRequired: job?.resumeRequired ?? true,
 });
 
 export default function JobForm({ job, onSave, onCancel }) {
@@ -36,6 +38,7 @@ export default function JobForm({ job, onSave, onCancel }) {
         salaryMin: form.salaryMin === "" ? null : Number(form.salaryMin),
         salaryMax: form.salaryMax === "" ? null : Number(form.salaryMax),
         deadline: form.deadline || null,
+        positions: form.positions === "" ? 1 : Number(form.positions),
       });
     } catch (err) {
       setError(err.response?.data?.message || "Could not save job");
@@ -59,20 +62,42 @@ export default function JobForm({ job, onSave, onCancel }) {
           </label>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <select name="type" value={form.type} onChange={set} className={input}>
-            {TYPES.map((t) => <option key={t}>{t}</option>)}
-          </select>
-          <select name="status" value={form.status} onChange={set} className={input}>
-            {STATUSES.map((s) => <option key={s}>{s}</option>)}
-          </select>
+          <label className="block">
+            <span className="block text-sm font-medium text-gray-700 mb-1">Employment type</span>
+            <select name="type" value={form.type} onChange={set} className={input}>
+              {TYPES.map((t) => <option key={t}>{t}</option>)}
+            </select>
+          </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-gray-700 mb-1">Posting status</span>
+            <select name="status" value={form.status} onChange={set} className={input}>
+              {STATUSES.map((s) => <option key={s}>{s}</option>)}
+            </select>
+          </label>
         </div>
         <textarea name="description" value={form.description} onChange={set} placeholder="Description" required rows={4} className={input} />
         <textarea name="requirements" value={form.requirements} onChange={set} placeholder="Requirements (one per line)" rows={3} className={input} />
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <input name="salaryMin" type="number" min="0" value={form.salaryMin} onChange={set} placeholder="Salary min" className={input} />
           <input name="salaryMax" type="number" min="0" value={form.salaryMax} onChange={set} placeholder="Salary max" className={input} />
-          <input name="deadline" type="date" value={form.deadline} onChange={set} className={input} title="Application deadline" />
         </div>
+        <div className="grid grid-cols-2 gap-3">
+          <label className="block">
+            <span className="block text-sm font-medium text-gray-700 mb-1">Number of positions available</span>
+            <input name="positions" type="number" min="1" step="1" value={form.positions} onChange={set} required className={input} />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-medium text-gray-700 mb-1">Application deadline</span>
+            <input name="deadline" type="date" value={form.deadline} onChange={set} className={input} />
+          </label>
+        </div>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="resumeRequired" checked={form.resumeRequired} onChange={set} />
+          <span>
+            <span className="font-medium text-gray-700">CV required</span>
+            <span className="text-gray-500"> – applicants must have a CV uploaded to apply</span>
+          </span>
+        </label>
 
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onCancel} className="px-4 py-2 text-sm rounded border border-gray-300 hover:bg-gray-50">

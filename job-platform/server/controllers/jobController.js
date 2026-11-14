@@ -52,6 +52,11 @@ export const applyToJob = async (req, res) => {
     if (job.deadline && job.deadline < new Date())
       return res.status(400).json({ message: "Application deadline has passed" });
 
+    if (job.resumeRequired !== false && !req.user.resume?.filename)
+      return res.status(400).json({
+        message: "This job requires a CV. Please upload your resume before applying.",
+      });
+
     const application = await Application.create({
       job: job._id,
       applicant: req.user._id,

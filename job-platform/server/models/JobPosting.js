@@ -21,6 +21,16 @@ const jobPostingSchema = new mongoose.Schema(
     salaryMin: { type: Number, min: 0 },
     salaryMax: { type: Number, min: 0 },
     deadline: { type: Date },
+    resumeRequired: { type: Boolean, default: true },
+    positions: {
+      type: Number,
+      min: [1, "positions must be at least 1"],
+      default: 1,
+      validate: {
+        validator: Number.isInteger,
+        message: "positions must be a whole number",
+      },
+    },
     status: { type: String, enum: JOB_STATUSES, default: "open", index: true },
   },
   { timestamps: true }
