@@ -1,0 +1,15 @@
+import test from 'node:test'; import assert from 'node:assert/strict';
+import JobPosting from '../models/JobPosting.js'; import Application from '../models/Application.js';
+import {listOpenJobs,getJob,applyToJob} from '../controllers/jobController.js'; import {mockRes} from './helpers.js';
+const id='507f1f77bcf86cd799439011';
+const orig={find:JobPosting.find,findOne:JobPosting.findOne,create:Application.create};
+test.afterEach(()=>{JobPosting.find=orig.find;JobPosting.findOne=orig.findOne;Application.create=orig.create;});
+
+test('listOpenJobs always filters open and applies type/remote/search',async()=>{let filter; JobPosting.find=f=>{filter=f;return{sort:async()=>[]}}; const res=mockRes(); await listOpenJobs({query:{search:'C++ (dev)',type:'internship',remote:'true'}},res); assert.equal(filter.status,'open'); assert.equal(filter.type,'internship'); assert.equal(filter.remote,true); assert.ok(filter.$or[0].title instanceof RegExp); assert.equal(res.statusCode,200);});
+test('listOpenJobs does not treat remote=false as true',async()=>{let filter;JobPosting.find=f=>{filter=f;return{sort:async()=>[]}};await listOpenJobs({query:{remote:'false'}},mockRes());assert.equal(filter.remote,undefined);});
+test('getJob returns 404 for malformed id and missing/closed job',async()=>{let res=mockRes();await getJob({params:{id:'bad'}},res);assert.equal(res.statusCode,404);JobPosting.findOne=async()=>null;res=mockRes();await getJob({params:{id}},res);assert.equal(res.statusCode,404);});
+test('getJob returns open job',async()=>{const job={_id:id};JobPosting.findOne=async()=>job;const res=mockRes();await getJob({params:{id}},res);assert.equal(res.body.job,job);});
+test('apply rejects malformed/missing job and expired deadline',async()=>{let res=mockRes();await applyToJob({params:{id:'bad'},user:{_id:id},body:{}},res);assert.equal(res.statusCode,404);JobPosting.findOne=async()=>null;res=mockRes();await applyToJob({params:{id},user:{_id:id},body:{}},res);assert.equal(res.statusCode,404);JobPosting.findOne=async()=>({_id:id,deadline:new Date(Date.now()-1000)});res=mockRes();await applyToJob({params:{id},user:{_id:id},body:{}},res);assert.equal(res.statusCode,400);});
+test('deadline exactly in future allows application and passes cover letter',async()=>{JobPosting.findOne=async()=>({_id:id,deadline:new Date(Date.now()+60000)});let data;Application.create=async d=>(data=d,{_id:'app'});const res=mockRes();await applyToJob({params:{id},user:{_id:'u1'},body:{coverLetter:'Hi'}},res);assert.equal(res.statusCode,201);assert.equal(data.coverLetter,'Hi');});
+test('duplicate application maps Mongo unique error to 409',async()=>{JobPosting.findOne=async()=>({_id:id});Application.create=async()=>{const e=new Error('dup');e.code=11000;throw e};const res=mockRes();await applyToJob({params:{id},user:{_id:'u1'},body:{}},res);assert.equal(res.statusCode,409);});
+test('unexpected application error returns 500',async()=>{JobPosting.findOne=async()=>({_id:id});Application.create=async()=>{throw new Error('db down')};const res=mockRes();await applyToJob({params:{id},user:{_id:'u1'},body:{}},res);assert.equal(res.statusCode,500);});

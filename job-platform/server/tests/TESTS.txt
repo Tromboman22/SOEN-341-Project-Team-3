@@ -1,0 +1,21 @@
+# Backend unit and edge-case tests
+
+Run from `job-platform/server`:
+
+```bash
+npm install
+npm test
+```
+
+The suite uses Vitest mocks, so **MongoDB does not need to be running**. It covers authentication, authorization middleware, job browsing/application logic, recruiter CRUD/application/statistics logic, resume logic, and Mongoose model validation.
+
+## Edge cases intentionally included
+
+- Missing registration fields, invalid roles, blank recruiter company name, duplicate email, missing login email, wrong password.
+- Missing/malformed JWT, deleted user, invalid token, legacy users with no role.
+- Malformed MongoDB IDs, missing/closed jobs, expired deadlines, duplicate applications.
+- Search strings containing regex metacharacters, `remote=false`, empty optional salary/deadline fields.
+- Mass-assignment attempts (`_id`, `recruiter`, `company`), multiline/blank requirements, unowned jobs/applications.
+- Equal salary bounds, reversed salary bounds, negative salaries, invalid enums/statuses.
+- Missing resume upload, applicant-only checks, replacing an existing resume, missing resume file, filenames containing spaces.
+- Recruiter statistics with multiple statuses and jobs with zero applications.

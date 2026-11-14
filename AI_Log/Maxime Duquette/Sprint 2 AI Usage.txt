@@ -1,0 +1,4 @@
+Sprint 2 AI Usage: Unit tests, edge cases coverage and summarization for TESTS.txt.
+Creating of a ci.yml file to add continuous integration feature to our submissions that automatically runs the tests implemented and gives feedback. 
+
+https://chatgpt.com/share/6adedb63-a734-83e9-b841-d7a62186468e
