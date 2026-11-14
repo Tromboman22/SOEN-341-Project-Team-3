@@ -8,22 +8,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     if (!token) return setLoading(false);
     api
       .get("/auth/me")
       .then((res) => setUser(res.data.user))
-      .catch(() => localStorage.removeItem("token"))
+      .catch(() => {
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+      })
       .finally(() => setLoading(false));
   }, []);
 
-  const login = (token, user) => {
-    localStorage.setItem("token", token);
+  const login = (token, user, rememberMe = false) => {
+    if (rememberMe) {
+      localStorage.setItem("token", token);
+      sessionStorage.removeItem("token");
+    } else {
+      sessionStorage.setItem("token", token);
+      localStorage.removeItem("token");
+    }
     setUser(user);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setUser(null);
   };
 
