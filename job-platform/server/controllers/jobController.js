@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import JobPosting from "../models/JobPosting.js";
 import Application from "../models/Application.js";
+import { notify } from "../services/notificationService.js";
 
 // ---------- public / applicant side ----------
 
@@ -56,6 +57,8 @@ export const applyToJob = async (req, res) => {
       applicant: req.user._id,
       coverLetter: req.body.coverLetter,
     });
+    await notify({ recipient: job.recruiter, type: "new_application", title: "New job application",
+      message: `A candidate applied to ${job.title}.`, job: job._id, application: application._id });
     res.status(201).json({ application });
   } catch (err) {
     if (err.code === 11000)

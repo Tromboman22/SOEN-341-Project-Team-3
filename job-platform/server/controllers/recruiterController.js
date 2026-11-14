@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import JobPosting from "../models/JobPosting.js";
 import Application, { APPLICATION_STATUSES } from "../models/Application.js";
 import Applicant from "../models/Applicant.js";
+import { notify } from "../services/notificationService.js";
 
 // Only these fields may be set from the request body (blocks mass-assignment
 // of `recruiter`, `_id`, etc.)
@@ -134,8 +135,20 @@ export const updateApplicationStatus = async (req, res) => {
     const application = await ownedApplication(req);
     if (!application)
       return res.status(404).json({ message: "Application not found" });
-    application.status = status;
-    await application.save();
+    const previousStatus = application.status;
+    if (previousStatus !== status) {
+      application.status = status;
+      await application.save();
+      const job = await JobPosting.findById(application.job).select("title");
+      const isInterview = status === "shortlisted";
+      await notify({ recipient: application.applicant,
+        type: isInterview ? "interview_invitation" : "status_update",
+        title: isInterview ? "Interview consideration" : "Application status updated",
+        message: isInterview
+          ? `You have been shortlisted for ${job?.title || "a job"}. Check with the recruiter for interview details.`
+          : `Your application for ${job?.title || "a job"} is now ${status}.`,
+        job: application.job, application: application._id });
+    }
     res.json({ application });
   } catch (err) {
     res.status(500).json({ message: err.message });

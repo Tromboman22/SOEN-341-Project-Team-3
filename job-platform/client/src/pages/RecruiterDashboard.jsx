@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import NotificationBell from "../components/NotificationBell";
 import { useAuth } from "../context/AuthContext";
 import StatCard from "../components/recruiter/StatCard";
 import JobForm from "../components/recruiter/JobForm";
@@ -88,6 +89,7 @@ export default function RecruiterDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-4">
+            <NotificationBell />
             <button
               onClick={() => setEditing("new")}
               className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700"

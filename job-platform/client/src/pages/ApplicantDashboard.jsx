@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import NotificationBell from "../components/NotificationBell";
 import { useAuth } from "../context/AuthContext";
 
 export default function ApplicantDashboard() {
@@ -141,6 +142,7 @@ export default function ApplicantDashboard() {
                         )}
                     </div>
                     <div className="flex items-center gap-4 shrink-0">
+                        <NotificationBell />
                         <button
                             onClick={() => navigate("/profile")}
                             className="text-sm text-blue-600 hover:underline"
