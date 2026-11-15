@@ -21,3 +21,36 @@
 
 **Responsible Person:**
     Li Yansong
+
+
+**Task ID/Title:**
+
+Implement Notification Feature (Sprint 3)
+
+**Purpose of AI Use:**
+
+Assist with implementing and debugging the notification functionality for the job application platform.
+
+**Chat Link or Prompt/Response:**
+
+Used ChatGPT to review the existing project structure, troubleshoot integration issues, and provide implementation guidance for the notification system.
+
+**AI-Suggested Content:**
+
+AI suggested improvements to the notification logic, backend controller integration, and notification handling within the existing application. It also provided guidance on integrating the feature with the existing Express.js and MongoDB structure.
+
+**Validation:**
+
+Reviewed the suggested code, compared modified files with the original project, and checked compatibility with the existing backend structure. Verified the changes using Git diff before integration.
+
+**Decision:**
+
+Modified and partially accepted.
+
+**Reflection:**
+
+AI helped simplify the development process and identify integration issues more efficiently. The suggestions provided useful guidance for implementing the notification feature while allowing me to review the code, understand the changes, and make necessary adjustments to fit the existing project.
+
+**Responsible Person:**
+
+Li Yansong
