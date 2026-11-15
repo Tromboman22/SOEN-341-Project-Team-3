@@ -188,3 +188,30 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: "Could not update profile" });
   }
 };
+
+export const getPublicProfile = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Find the applicant by id ¡ª recruiters should only see applicant profiles
+        const applicant = await Applicant.findById(id);
+        if (!applicant) return res.status(404).json({ message: "Applicant not found" });
+
+        const p = applicant.toPublic();
+        // Strip private stuff ¡ª recruiters see the profile, not account internals
+        res.json({
+            profile: {
+                _id: p._id,
+                name: p.name,
+                headline: p.headline,
+                bio: p.bio,
+                location: p.location,
+                phone: p.phone,
+                skills: p.skills,
+                links: p.links,
+                resume: p.resume,
+            },
+        });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
