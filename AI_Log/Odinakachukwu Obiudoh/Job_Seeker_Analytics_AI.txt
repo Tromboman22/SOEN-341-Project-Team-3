@@ -1,0 +1,44 @@
+Task ID/Title:
+	Sprint 3 - Job seeker analytics: application history, status breakdown, and activity metrics (applications over time)
+
+Purpose of AI Use:
+	Check the latest state of the repo, then design, build and test the job seeker analytics feature.
+
+Chat Link or Prompt/Response:
+	Claude (claude.ai).
+	Prompt: "check the latest git and i've been assigned 'Job seeker analytics: application history, status breakdown
+	(pending, interview, rejected, etc.), and activity metrics like applications over time.'"
+	Response: Claude reviewed main, confirmed nobody had started analytics on another branch, built the feature,
+	tested it, and returned a git patch.
+
+AI-Suggested Content:
+	- Backend: GET /api/applications/my/analytics (applicant only) returning the count per status, in-progress count,
+	  response rate, interview rate, hired count, applications in the last 7/30 days, and applications per week or
+	  month for the last 12 periods. The calculation is a pure function in services/applicantAnalytics.js.
+	- Weeks and months use the user's time zone (sent by the browser) so late-evening applications are not counted
+	  in the wrong week because the server runs in UTC.
+	- Frontend: a new My analytics page (/analytics) with stat tiles, a status breakdown that filters the history when
+	  clicked, an applications-over-time column chart (weekly/monthly, hover and keyboard tooltips, table view), and a
+	  filterable application history. Job seekers see friendly status names (submitted = Pending,
+	  shortlisted = Interview, etc.). Links added on the applicant dashboard. No new npm packages.
+	- 20 unit tests in tests/analytics.test.js using node:test, in the same style as the existing tests.
+
+Validation:
+	Claude ran the new tests (20 passing) and the full backend suite, built the client, and checked the page in a
+	headless browser with sample data at desktop and phone widths (including the empty state and the recruiter
+	redirect). It also broke the code on purpose (wrong week start, ignoring the time zone, wrong status grouping) to
+	confirm the tests catch those mistakes. I applied the patch, read through the diff, ran npm test, and opened the
+	analytics page locally.
+
+Decision:
+	Accepted after review.
+
+Reflection:
+	Checking main and the other branches first confirmed the feature wasn't already in progress. Time zones were the
+	trickiest part: the server on Render runs in UTC, so grouping by week on the server alone would put Sunday-evening
+	applications from Montreal into the next week. While testing, the AI also found existing tests on main that fail
+	because they were not updated for the CV-required rule and the new notification code. Most were fixed by the team;
+	the remaining one (updateApplicationStatus) I reported instead of changing their tests in my feature branch.
+
+Responsible Person:
+	Odinakachukwu Obiudoh
