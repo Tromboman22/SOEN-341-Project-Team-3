@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import api from "../../api/axios";
 
 const STATUSES = ["submitted", "reviewing", "shortlisted", "rejected", "hired"];
@@ -6,6 +6,10 @@ const STATUSES = ["submitted", "reviewing", "shortlisted", "rejected", "hired"];
 export default function ApplicationsPanel({ job, onClose, onChanged }) {
   const [applications, setApplications] = useState(null);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [resumeOnly, setResumeOnly] = useState(false);
+  const [sort, setSort] = useState("newest");
 
   useEffect(() => {
     api
@@ -33,6 +37,36 @@ export default function ApplicationsPanel({ job, onClose, onChanged }) {
     }
   };
 
+  // Filtering happens in the browser: all of this job's applications are already loaded
+  const visible = useMemo(() => {
+    if (!applications) return [];
+    const q = search.trim().toLowerCase();
+    const list = applications.filter((a) => {
+      if (statusFilter !== "all" && a.status !== statusFilter) return false;
+      if (resumeOnly && !a.applicant?.resume?.originalName) return false;
+      if (!q) return true;
+      const p = a.applicant ?? {};
+      const haystack = [p.name, p.email, p.headline, p.location, ...(p.skills ?? [])]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+    return list.sort((a, b) => {
+      if (sort === "name") return (a.applicant?.name ?? "").localeCompare(b.applicant?.name ?? "");
+      const diff = new Date(a.createdAt) - new Date(b.createdAt);
+      return sort === "oldest" ? diff : -diff;
+    });
+  }, [applications, search, statusFilter, resumeOnly, sort]);
+
+  const filtersActive = search.trim() !== "" || statusFilter !== "all" || resumeOnly;
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("all");
+    setResumeOnly(false);
+  };
+  const countFor = (s) => applications?.filter((a) => a.status === s).length ?? 0;
+
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-end z-50">
       <div className="bg-white w-full max-w-lg h-full overflow-y-auto p-6 shadow-xl">
@@ -48,8 +82,53 @@ export default function ApplicationsPanel({ job, onClose, onChanged }) {
         {!applications && !error && <p className="text-sm text-gray-500">Loading...</p>}
         {applications?.length === 0 && <p className="text-sm text-gray-500">No applications yet.</p>}
 
+          {applications?.length > 0 && (
+          <div className="mb-4 space-y-2">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, email, location or skill"
+              className="w-full border border-gray-300 p-2 rounded text-sm"
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="block text-xs font-medium text-gray-700 mb-1">Filter by status</span>
+                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full border border-gray-300 p-2 rounded text-sm">
+                  <option value="all">All ({applications.length})</option>
+                  {STATUSES.map((s) => (
+                    <option key={s} value={s}>{s} ({countFor(s)})</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="block text-xs font-medium text-gray-700 mb-1">Sort by</span>
+                <select value={sort} onChange={(e) => setSort(e.target.value)} className="w-full border border-gray-300 p-2 rounded text-sm">
+                  <option value="newest">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                  <option value="name">Name (A–Z)</option>
+                </select>
+              </label>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" checked={resumeOnly} onChange={(e) => setResumeOnly(e.target.checked)} />
+                Has a resume
+              </label>
+              <span className="text-xs text-gray-500">
+                Showing {visible.length} of {applications.length}
+                {filtersActive && (
+                  <button onClick={clearFilters} className="ml-2 text-blue-600 hover:underline">Clear filters</button>
+                )}
+              </span>
+            </div>
+          </div>
+        )}
+        {applications?.length > 0 && visible.length === 0 && (
+          <p className="text-sm text-gray-500">No applicants match these filters.</p>
+        )}
+
         <ul className="space-y-3">
-          {applications?.map((a) => (
+          {visible.map((a) => (
             <li key={a._id} className="border border-gray-200 rounded-lg p-3">
               <div className="flex justify-between gap-2">
                 <div>
