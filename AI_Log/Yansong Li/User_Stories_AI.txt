@@ -22,3 +22,29 @@ Reflection:
 
 Responsible Person: 
 	Yansong Li
+
+
+
+Task ID/Title:
+    Notification Feature User Stories
+
+Purpose of AI Use:
+    Assist in writing user stories for the notification feature in Sprint 3.
+
+Chat Link or Prompt/Response:
+    Used ChatGPT to generate and refine user stories related to job application notifications.
+
+AI-Suggested Content:
+    AI suggested user stories for notifying applicants about job application status updates and providing notifications within the application.
+
+Validation:
+    Reviewed the generated user stories and checked whether they matched the notification feature requirements and existing project functionality.
+
+Decision: Indicate whether the AI output was:
+    Modified and partially accepted.
+
+Reflection:
+    AI helped organize the notification requirements into clear user stories. Some suggestions needed adjustments to match the actual project scope and implementation.
+
+Responsible Person:
+    Yansong Li
