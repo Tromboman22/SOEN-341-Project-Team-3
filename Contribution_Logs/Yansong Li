@@ -6,3 +6,10 @@
 - Implemented the job submission functionality, allowing employers to create and submit job postings.
 - Implemented the job application tracking functionality, allowing applicants to view and track their submitted applications.
 - Tested and debugged the implemented features to ensure proper functionality.
+
+**Sprint 3**
+
+- Wrote user stories for the notification feature, defining notification requirements and acceptance criteria.
+- Implemented the notification functionality to inform applicants about job application status updates.
+- Integrated the notification system with the existing backend and application structure.
+- Reviewed and debugged the implementation to ensure compatibility with existing features.
