@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import NotificationBell from "../components/NotificationBell";
+import StatusBadge from "../components/StatusBadge";
 import { useAuth } from "../context/AuthContext";
 
 export default function ApplicantDashboard() {
@@ -143,6 +144,12 @@ export default function ApplicantDashboard() {
                     </div>
                     <div className="flex items-center gap-4 shrink-0">
                         <NotificationBell />
+                        <button
+                            onClick={() => navigate("/analytics")}
+                            className="text-sm text-blue-600 hover:underline"
+                        >
+                            Analytics
+                        </button>
                         <button
                             onClick={() => navigate("/profile")}
                             className="text-sm text-blue-600 hover:underline"
@@ -304,12 +311,20 @@ export default function ApplicantDashboard() {
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">My Applications</h2>
 
-                        <button
-                            onClick={loadApplications}
-                            className="text-sm text-blue-600 hover:underline"
-                        >
-                            Refresh
-                        </button>
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={() => navigate("/analytics")}
+                                className="text-sm text-blue-600 hover:underline"
+                            >
+                                View analytics
+                            </button>
+                            <button
+                                onClick={loadApplications}
+                                className="text-sm text-blue-600 hover:underline"
+                            >
+                                Refresh
+                            </button>
+                        </div>
                     </div>
 
                     {applicationsError && (
@@ -340,9 +355,7 @@ export default function ApplicantDashboard() {
                                     </p>
 
                                     <div className="mt-3">
-                                        <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
-                                            {application.status}
-                                        </span>
+                                        <StatusBadge status={application.status} />
                                     </div>
                                 </div>
                             ))}

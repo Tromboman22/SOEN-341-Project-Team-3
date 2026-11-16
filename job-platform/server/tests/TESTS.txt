@@ -19,3 +19,4 @@ The suite uses Vitest mocks, so **MongoDB does not need to be running**. It cove
 - Equal salary bounds, reversed salary bounds, negative salaries, invalid enums/statuses.
 - Missing resume upload, applicant-only checks, replacing an existing resume, missing resume file, filenames containing spaces.
 - Recruiter statistics with multiple statuses and jobs with zero applications.
+- Job seeker analytics (`tests/analytics.test.js`): no applications, rates when nothing has been answered, week/month buckets in the user's time zone (Sunday-night and New Year's Eve boundaries, daylight saving), applications older than the chart window or dated in the future, missing dates, invalid `interval`/`tz` values (including arrays and `__proto__`), and the route's applicant-only check.

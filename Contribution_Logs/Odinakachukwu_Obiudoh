@@ -1,6 +1,7 @@
 Odinakachukwu Obiudoh
 40109139
-## Sprint 1 
+
+## Sprint 1
 
 ## Sprint 2
 
@@ -8,11 +9,21 @@ Odinakachukwu Obiudoh
 -Participated in meeting #2 of Sprint 2 ~1h
 -Reviewed the project board against the code in the repo to find what was done and what was left. Found that the board was out of date (most implementation tasks were built but still marked Todo) and that the profile management work on feature/profile-and-resume-management was never merged into main ~20min (AI-assisted)
 -Completed profile management (#42) on top of Shengyuan's branch feature/profile-and-resume-management (AI-assisted, see AI_Log/Odinakachukwu Obiudoh) ~1h
-   -Added server-side validation for profile fields (required name, length limits, skill cleanup, http(s)-only links)
-   -Made the user's name editable on the profile page
-   -Recruiters now see the applicant's profile (skills, links, bio, location, phone) when reviewing applications
-   -Job postings now update when a recruiter renames their company
-   -Removed an unused duplicate deleteResume function
-   -Added 23 unit tests for profile management and resume delete (tests/profile.test.js, tests/resumeDelete.test.js)
+-Added server-side validation for profile fields (required name, length limits, skill cleanup, http(s)-only links)
+-Made the user's name editable on the profile page
+-Recruiters now see the applicant's profile (skills, links, bio, location, phone) when reviewing applications
+-Job postings now update when a recruiter renames their company
+-Removed an unused duplicate deleteResume function
+-Added 23 unit tests for profile management and resume delete (tests/profile.test.js, tests/resumeDelete.test.js)
 -Applied the changes to the branch, re-ran the tests and pushed ~20min
 -Created my AI log file for #42 and filled it ~10min
+
+## Sprint 3
+
+-Reviewed the latest main and branches before starting job seeker analytics ~15min
+-Built job seeker analytics (AI-assisted, see AI_Log/Odinakachukwu Obiudoh) ~2h
+-Analytics endpoint: status breakdown, response/interview rates, applications per week or month in the user's time zone
+-My analytics page: stat tiles, clickable status breakdown, applications-over-time chart, filterable application history
+-Added 20 unit tests (tests/analytics.test.js)
+-Found failing tests on main (CV-required rule and notifications) and reported them to the team ~10min
+-Created my AI log for analytics ~10min
