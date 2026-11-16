@@ -19,3 +19,10 @@
 -Pulled the branch test_maxime including all tests and CI feature
 
 -Organized the project board ~15mins
+
+
+SPRINT 3 CONTRIBUTION -------------------------------------------------------------------------
+
+Participated in meeting #1 (~30mins) 
+Created two acceptance tests for each remaining user story left for the project (~ 2h)
+Created the unit tests related to Samuel's part (Task #1, Recruiter functionality) (~1h)
