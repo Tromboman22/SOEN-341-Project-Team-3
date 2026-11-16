@@ -1,2 +1,48 @@
 Sprint 3 AI Logs 
 
+Task ID/Title:
+  Backlog
+
+Purpose of AI Use:
+	Create acceptance tests for user stories 
+
+Chat Link or Prompt/Response:
+	Used chatgpt:
+Prompt 1 "Can you create two acceptance tests for each user story given" (With a paste of user stories given + project)
+Response 1: Created two acceptance tests (A and B) for each given user story 
+
+Validation:
+	The tests given made sense considering the scope of our project.
+
+Decision:
+	Accepted after review.
+
+Reflection:
+	None
+
+Responsible Person:
+	Maxime
+
+Task ID/Title:
+Unit tests for recruiter functionality
+
+Purpose of AI Use:
+Create new unit tests linked in testing-maxime (already existing 41s) for the task #1 of the project about recruiter functionality, implemented by Samuel
+
+Chat Link or Prompt/Response:
+Prompt 1: " Can you create unit tests like the ones in testing-maxime for the recruiter dashboard task "Recruiter dashboard: create, edit, archive, and manage postings; view applications per posting with filters (status, date); review candidates and update their status"?"
+Response 1: Created 14 new unit tests to download. 
+
+Validation: The new unit tests were good.
+
+Decision: 
+Accepted after review.
+
+Reflection: 
+After running npm test in the terminal, it seemed that the new 14 tests were working properly when prompted to the main branch,
+but one of the old test (from the initial 41s) wasn't working properly anymore. 
+
+After review, it seems that the new tests and implementations had nothing to do with this error - it came from another update from Yansong.
+
+Responsible Person:
+Maxime
