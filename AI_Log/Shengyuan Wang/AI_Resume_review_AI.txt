@@ -1,1 +1,15 @@
+Task: Project code implementation - AI resume review
 
+Purpose of AI Use: Generating code for the project functionality
+
+Chat Link or Prompt/Response: https://chat.deepseek.com/share/896njyxltp69bm5qu1
+
+AI-Suggested Content: Generate the backend controller to extract PDF text and call the Gemini API, the new API route, and the frontend UI to display the AI suggestions.
+
+Validation: The code was integrated and tested; the API dashboard confirmed successful connections, and the AI suggestions correctly displayed on the frontend.
+
+Decision: Modified before use.
+
+Reflection: The AI generated functional code, but required modifications for the specific Gemini model version, timeout handling, and adaptation to the project's file structure.
+
+Responsible Person: Shengyuan Wang
