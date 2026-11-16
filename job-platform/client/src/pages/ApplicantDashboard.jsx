@@ -15,6 +15,11 @@ export default function ApplicantDashboard() {
     const [uploading, setUploading] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
+    // AI suggestions
+    const [suggestions, setSuggestions] = useState(null);
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState("");
+
     // jobs
     const [jobs, setJobs] = useState([]);
     const [jobsLoading, setJobsLoading] = useState(true);
@@ -76,6 +81,9 @@ export default function ApplicantDashboard() {
             setUser({ ...user, resume: res.data.resume });
             setResumeMsg("Resume uploaded ✅");
             setFile(null);
+            // Clear stale suggestions from the previous version
+            setSuggestions(null);
+            setAiError("");
         } catch (err) {
             setResumeMsg(err.response?.data?.message || "Upload failed");
         } finally {
@@ -101,10 +109,33 @@ export default function ApplicantDashboard() {
             setUser({ ...user, resume: null });
             setFile(null);
             setResumeMsg("Resume deleted");
+            setSuggestions(null);
+            setAiError("");
         } catch (err) {
             setResumeMsg(err.response?.data?.message || "Delete failed");
         } finally {
             setDeleting(false);
+        }
+    };
+
+    const onGetSuggestions = async () => {
+        setAiLoading(true);
+        setAiError("");
+        setSuggestions(null); // Clear previous results immediately
+
+        try {
+            // Increase timeout to 90 seconds (90000 ms) for AI processing
+            const res = await api.get("/resume/suggestions", { timeout: 90000 });
+            setSuggestions(res.data.suggestions);
+        } catch (err) {
+            console.error("AI Error:", err);
+            setAiError(
+                err.response?.data?.message ||
+                err.message ||
+                "Could not get suggestions. Check the server console."
+            );
+        } finally {
+            setAiLoading(false);
         }
     };
 
@@ -124,6 +155,12 @@ export default function ApplicantDashboard() {
     const onLogout = () => {
         logout();
         navigate("/login");
+    };
+
+    const scoreColor = (score) => {
+        if (score >= 70) return "bg-green-100 text-green-700";
+        if (score >= 50) return "bg-yellow-100 text-yellow-700";
+        return "bg-red-100 text-red-700";
     };
 
     return (
@@ -226,6 +263,113 @@ export default function ApplicantDashboard() {
                     </form>
 
                     {resumeMsg && <p className="mt-3 text-sm">{resumeMsg}</p>}
+
+                    {/* AI Suggestions */}
+                    {user?.resume && (
+                        <div className="mt-5 border-t border-gray-100 pt-4">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <button
+                                    type="button"
+                                    onClick={onGetSuggestions}
+                                    disabled={aiLoading}
+                                    className="bg-purple-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {aiLoading ? "Analyzing…" : "✨ Get AI suggestions"}
+                                </button>
+                                <span className="text-xs text-gray-500">
+                                    Review your resume against general best practices.
+                                </span>
+                            </div>
+
+                            {aiError && (
+                                <p className="mt-3 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-200">
+                                    {aiError}
+                                </p>
+                            )}
+
+                            {suggestions && (
+                                <div className="mt-4 space-y-4 text-sm">
+                                    {/* Score */}
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-semibold">Overall score</span>
+                                        <span
+                                            className={`px-2 py-0.5 rounded-full text-xs font-bold ${scoreColor(
+                                                suggestions.overall_score
+                                            )}`}
+                                        >
+                                            {suggestions.overall_score}/100
+                                        </span>
+                                    </div>
+
+                                    {/* Strengths */}
+                                    {Array.isArray(suggestions.strengths) &&
+                                        suggestions.strengths.length > 0 && (
+                                            <div>
+                                                <h4 className="font-semibold text-green-700 mb-1">
+                                                    ✅ Strengths
+                                                </h4>
+                                                <ul className="list-disc pl-5 space-y-0.5">
+                                                    {suggestions.strengths.map((s, i) => (
+                                                        <li key={i}>{s}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                    {/* Improvements */}
+                                    {Array.isArray(suggestions.improvements) &&
+                                        suggestions.improvements.length > 0 && (
+                                            <div>
+                                                <h4 className="font-semibold text-orange-700 mb-1">
+                                                    🔧 Improvements
+                                                </h4>
+                                                <ul className="list-disc pl-5 space-y-0.5">
+                                                    {suggestions.improvements.map((s, i) => (
+                                                        <li key={i}>{s}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                    {/* Missing keywords */}
+                                    {Array.isArray(suggestions.missing_keywords) &&
+                                        suggestions.missing_keywords.length > 0 && (
+                                            <div>
+                                                <h4 className="font-semibold text-blue-700 mb-1">
+                                                    🔍 Missing keywords
+                                                </h4>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {suggestions.missing_keywords.map((k, i) => (
+                                                        <span
+                                                            key={i}
+                                                            className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs"
+                                                        >
+                                                            {k}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                    {/* Rewrite example */}
+                                    {suggestions.rewrite_example?.original &&
+                                        suggestions.rewrite_example?.improved && (
+                                            <div>
+                                                <h4 className="font-semibold text-purple-700 mb-1">
+                                                    ✍️ Rewrite example
+                                                </h4>
+                                                <p className="text-red-600 line-through">
+                                                    {suggestions.rewrite_example.original}
+                                                </p>
+                                                <p className="text-green-700">
+                                                    {suggestions.rewrite_example.improved}
+                                                </p>
+                                            </div>
+                                        )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </section>
 
                 {/* Jobs */}
