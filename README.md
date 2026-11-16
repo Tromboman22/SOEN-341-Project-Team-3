@@ -184,7 +184,8 @@ Tests use mocked dependencies where appropriate to verify backend functionality 
 
 ## Continuous Integration (CI)
 
-The project uses **GitHub Actions** to automatically execute backend tests.
+The project uses **GitHub Actions** to automatically run backend tests and
+frontend lint/build checks.
 
 The CI workflow is defined in:
 
@@ -198,9 +199,10 @@ The workflow runs when code is pushed or a pull request is opened or updated, ac
 
 1. GitHub Actions checks out the repository.
 2. Node.js is configured.
-3. Backend dependencies are installed using `npm ci`.
+3. Backend and frontend dependencies are installed using `npm ci`.
 4. The backend test suite runs using `npm test`.
-5. GitHub Actions reports whether the tests passed or failed.
+5. The frontend is linted and built for production.
+6. GitHub Actions reports whether the checks passed or failed.
 
 This helps identify regressions before changes are merged into the main branch.
 
@@ -209,7 +211,22 @@ This helps identify regressions before changes are merged into the main branch.
 1. Open the repository on GitHub.
 2. Navigate to the **Actions** tab.
 3. Select the latest workflow run.
-4. Open the `backend-tests` job to view the results.
+4. Open the backend or frontend job to view the results.
+
+## Password reset email setup
+
+The backend sends password reset links through Resend. Configure these
+environment variables on the backend (and in `job-platform/server/.env` for
+local development):
+
+- `RESEND_API_KEY`: Resend API key.
+- `PASSWORD_RESET_FROM`: sender address verified with Resend, for example
+  `CareerConnect <no-reply@your-domain.com>`.
+- `CLIENT_URL`: frontend origin used in reset links, such as
+  `https://dreamy-stroopwafel-ddde76.netlify.app` in production or
+  `http://localhost:5173` locally.
+
+Reset links expire after one hour and can only be used once.
 
 ## Development Workflow
 
