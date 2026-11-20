@@ -1,35 +1,52 @@
-name: Backend CI
+name: CI
 
 on:
   push:
-    branches:
-      - main
-      - testing-maxime
   pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  backend-tests:
+  server:
+    name: Backend tests
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: job-platform/server
-
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: job-platform/server/package-lock.json
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Run backend unit tests
+      - name: Run backend tests
         run: npm test
+
+  client:
+    name: Frontend lint and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: job-platform/client
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: job-platform/client/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint client
+        run: npm run lint
+      - name: Build client
+        run: npm run build

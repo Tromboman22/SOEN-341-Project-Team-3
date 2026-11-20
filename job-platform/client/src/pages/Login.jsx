@@ -82,7 +82,7 @@ export default function Login() {
             Remember me
           </label>
           <Link
-            to="/reset-password"
+            to="/forgot-password"
             className="text-sm text-blue-600 hover:underline"
           >
             Forgot password?

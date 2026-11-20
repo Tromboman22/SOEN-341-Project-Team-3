@@ -1,9 +1,20 @@
-import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import { createHash, randomBytes } from "node:crypto";
 import jwt from "jsonwebtoken";
 import User, { ROLES } from "../models/User.js";
 import Applicant from "../models/Applicant.js";
 import Recruiter from "../models/Recruiter.js";
+import {
+  isPasswordResetEmailConfigured,
+  sendPasswordResetEmail,
+} from "../services/passwordResetEmail.js";
+
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+const PASSWORD_RESET_MESSAGE =
+  "If an account exists for that email, a password reset link has been sent.";
+
+export const hashResetToken = (token) =>
+  createHash("sha256").update(token).digest("hex");
 
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -66,59 +77,88 @@ export const login = async (req, res) => {
 };
 
 export const requestPasswordReset = async (req, res) => {
+  const email =
+    typeof req.body?.email === "string"
+      ? req.body.email.trim().toLowerCase()
+      : "";
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return res.status(400).json({ message: "A valid email is required" });
+
+  if (!isPasswordResetEmailConfigured())
+    return res
+      .status(503)
+      .json({ message: "Password reset email is not configured" });
+
   try {
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
+    const user = await User.findOne({ email });
+    if (!user) return res.json({ message: PASSWORD_RESET_MESSAGE });
 
-    const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) {
-      return res.status(404).json({ message: "No account found with that email" });
-    }
+    const resetToken = randomBytes(32).toString("hex");
+    const resetPasswordToken = hashResetToken(resetToken);
+    const resetPasswordExpires = new Date(Date.now() + RESET_TOKEN_TTL_MS);
 
-    const token = crypto.randomBytes(32).toString("hex");
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
-    await user.save();
-
-    res.json({
-      message: "Password reset link generated successfully.",
-      resetToken: token,
+    await User.findByIdAndUpdate(user._id, {
+      $set: { resetPasswordToken, resetPasswordExpires },
     });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    try {
+      await sendPasswordResetEmail({ to: user.email, token: resetToken });
+    } catch (error) {
+      await User.updateOne(
+        { _id: user._id, resetPasswordToken },
+        { $unset: { resetPasswordToken: "", resetPasswordExpires: "" } }
+      );
+      console.error("Password reset email delivery failed:", error);
+      return res
+        .status(503)
+        .json({ message: "Unable to send a reset email. Please try again later." });
+    }
+
+    return res.json({ message: PASSWORD_RESET_MESSAGE });
+  } catch (error) {
+    console.error("Password reset request failed:", error);
+    return res.status(500).json({ message: "Unable to process password reset" });
   }
 };
 
 export const resetPassword = async (req, res) => {
+  const { token, password } = req.body || {};
+  if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token))
+    return res.status(400).json({ message: "Missing or invalid reset token" });
+  if (typeof password !== "string" || password.length < 6)
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters" });
+
   try {
-    const { token, password } = req.body;
+    const tokenQuery = {
+      resetPasswordToken: hashResetToken(token),
+      resetPasswordExpires: { $gt: new Date() },
+    };
+    if (!(await User.exists(tokenQuery)))
+      return res
+        .status(400)
+        .json({ message: "This reset link is invalid or has expired" });
 
-    if (!token || !password) {
-      return res.status(400).json({ message: "Token and new password are required" });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
-    }
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.findOneAndUpdate(
+      tokenQuery,
+      {
+        $set: { password: passwordHash },
+        $unset: { resetPasswordToken: "", resetPasswordExpires: "" },
+      },
+      { new: true, runValidators: true }
+    );
 
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
+    if (!user)
+      return res
+        .status(400)
+        .json({ message: "This reset link is invalid or has expired" });
 
-    if (!user) {
-      return res.status(400).json({ message: "Invalid or expired reset token" });
-    }
-
-    user.password = await bcrypt.hash(password, 10);
-    user.resetPasswordToken = null;
-    user.resetPasswordExpires = null;
-    await user.save();
-
-    res.json({ message: "Password reset successful" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.json({ message: "Password updated. You can now log in." });
+  } catch (error) {
+    console.error("Password reset failed:", error);
+    return res.status(500).json({ message: "Unable to reset password" });
   }
 };
 
